@@ -38,9 +38,19 @@ hook.Add("PlayerInitialSpawn", "CPG_GiveJobOnSpawn", function(ply)
             local job = getsavedjob(ply)
            
             if job ~= nil and job ~= GAMEMODE.DefaultTeam then
-            	local setTeam = ply.changeTeam or ply.SetTeam -- DarkRP compatibility
+            	local count = 0
+            	for k, v in pairs(player.GetAll()) do
+            		if not IsValid(v) then continue end
+            		if v:Team() ~= job then continue end
 
-                setTeam(ply, job, true)
+            		count = count + 1
+            	end
+
+            	if count < RPExtraTeams[job].max then
+            		local setTeam = ply.changeTeam or ply.SetTeam -- DarkRP compatibility
+
+                    setTeam(ply, job, true)
+            	end
             else
             	save_tbl(ply, ply:Team())
             end
