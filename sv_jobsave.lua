@@ -39,7 +39,7 @@ hook.Add("PlayerInitialSpawn", "CPG_GiveJobOnSpawn", function(ply)
            
             if job ~= nil and job ~= GAMEMODE.DefaultTeam then
             	local count = 0
-            	for k, v in pairs(player.GetAll()) do
+            	for k, v in pairs(player.GetAll()) do -- No, this will never support PERCENTAGES, since I am lazy to paste darkrp code!
             		if not IsValid(v) then continue end
             		if v:Team() ~= job then continue end
 
