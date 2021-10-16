@@ -38,19 +38,15 @@ hook.Add("PlayerInitialSpawn", "CPG_GiveJobOnSpawn", function(ply)
             local job = getsavedjob(ply)
            
             if job ~= nil and job ~= GAMEMODE.DefaultTeam then
-            	local count = 0
-            	for k, v in pairs(player.GetAll()) do -- No, this will never support PERCENTAGES, since I am lazy to paste darkrp code!
-            		if not IsValid(v) then continue end
-            		if v:Team() ~= job then continue end
-
-            		count = count + 1
-            	end
-
-            	if count < RPExtraTeams[job].max then
-            		local setTeam = ply.changeTeam or ply.SetTeam -- DarkRP compatibility
-
+            	local max = RPExtraTeams[job].max
+                local numPlayers = team.NumPlayers(job)
+                
+                if max ~= 0 and (max >= 1 and numPlayers >= max or max < 1 and (numPlayers + 1) / player.GetCount() > max) then
+                    return
+                else
+                    local setTeam = ply.changeTeam or ply.SetTeam
                     setTeam(ply, job, true)
-            	end
+                end
             else
             	save_tbl(ply, ply:Team())
             end
